@@ -1,10 +1,12 @@
 import { count, desc, eq } from 'drizzle-orm';
-import { db } from '../db/client';
+import { db, ensureDatabase } from '../db/client';
 import { posts, projects, type PostRow, type ProjectRow } from '../db/schema';
 import type { PostFormValues } from '../validation/post';
 import type { ProjectFormValues } from '../validation/project';
 
 export async function getAdminCounts() {
+  await ensureDatabase();
+
   const projectCount = (await db.select({ value: count() }).from(projects).get())?.value ?? 0;
   const postCount = (await db.select({ value: count() }).from(posts).get())?.value ?? 0;
   const publishedPostCount =
@@ -14,14 +16,20 @@ export async function getAdminCounts() {
 }
 
 export async function getAdminProjects(): Promise<ProjectRow[]> {
+  await ensureDatabase();
+
   return db.select().from(projects).orderBy(desc(projects.updatedAt)).all();
 }
 
 export async function getAdminProject(id: number): Promise<ProjectRow | null> {
+  await ensureDatabase();
+
   return (await db.select().from(projects).where(eq(projects.id, id)).get()) ?? null;
 }
 
 export async function createProject(values: ProjectFormValues): Promise<void> {
+  await ensureDatabase();
+
   const now = new Date();
 
   await db.insert(projects)
@@ -35,6 +43,8 @@ export async function createProject(values: ProjectFormValues): Promise<void> {
 }
 
 export async function updateProject(id: number, values: ProjectFormValues): Promise<void> {
+  await ensureDatabase();
+
   await db.update(projects)
     .set({
       ...values,
@@ -46,18 +56,26 @@ export async function updateProject(id: number, values: ProjectFormValues): Prom
 }
 
 export async function deleteProject(id: number): Promise<void> {
+  await ensureDatabase();
+
   await db.delete(projects).where(eq(projects.id, id)).run();
 }
 
 export async function getAdminPosts(): Promise<PostRow[]> {
+  await ensureDatabase();
+
   return db.select().from(posts).orderBy(desc(posts.updatedAt)).all();
 }
 
 export async function getAdminPost(id: number): Promise<PostRow | null> {
+  await ensureDatabase();
+
   return (await db.select().from(posts).where(eq(posts.id, id)).get()) ?? null;
 }
 
 export async function createPost(values: PostFormValues): Promise<void> {
+  await ensureDatabase();
+
   const now = new Date();
 
   await db.insert(posts)
@@ -72,6 +90,8 @@ export async function createPost(values: PostFormValues): Promise<void> {
 }
 
 export async function updatePost(id: number, values: PostFormValues, existing: PostRow): Promise<void> {
+  await ensureDatabase();
+
   const now = new Date();
 
   await db.update(posts)
@@ -86,5 +106,7 @@ export async function updatePost(id: number, values: PostFormValues, existing: P
 }
 
 export async function deletePost(id: number): Promise<void> {
+  await ensureDatabase();
+
   await db.delete(posts).where(eq(posts.id, id)).run();
 }

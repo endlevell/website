@@ -9,7 +9,8 @@ import { siteConfig } from '../lib/config/site';
 import { getFeaturedProjects, getPublishedPosts } from '../lib/db/queries';
 import { personJsonLd } from '../lib/seo/jsonLd';
 
-export const prerender = true;
+// Home reads DB-backed featured/latest content, so SSR keeps Vercel builds independent from Turso availability.
+export const prerender = false;
 
 const featuredProjects = await getFeaturedProjects(3);
 const latestPosts = await getPublishedPosts(3);

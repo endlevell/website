@@ -1,5 +1,5 @@
 import { asc, desc, eq, ne } from 'drizzle-orm';
-import { db } from './client';
+import { db, ensureDatabase } from './client';
 import { posts, projects, type PostRow, type ProjectRow } from './schema';
 import type { Post, Project, TagCount } from './types';
 
@@ -23,6 +23,8 @@ function mapPost(row: PostRow): Post {
 }
 
 export async function getFeaturedProjects(limit = 3): Promise<Project[]> {
+  await ensureDatabase();
+
   const rows = await db
     .select()
     .from(projects)
@@ -35,6 +37,8 @@ export async function getFeaturedProjects(limit = 3): Promise<Project[]> {
 }
 
 export async function getProjects(): Promise<Project[]> {
+  await ensureDatabase();
+
   const rows = await db
     .select()
     .from(projects)
@@ -46,11 +50,15 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  await ensureDatabase();
+
   const row = await db.select().from(projects).where(eq(projects.slug, slug)).get();
   return row ? mapProject(row) : null;
 }
 
 export async function getPublishedPosts(limit?: number): Promise<Post[]> {
+  await ensureDatabase();
+
   const query = db
     .select()
     .from(posts)
@@ -62,6 +70,8 @@ export async function getPublishedPosts(limit?: number): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
+  await ensureDatabase();
+
   const row = await db.select().from(posts).where(eq(posts.slug, slug)).get();
   return row && row.published ? mapPost(row) : null;
 }

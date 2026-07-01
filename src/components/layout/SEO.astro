@@ -7,6 +7,7 @@ type Props = {
   canonical?: string;
   ogType?: 'website' | 'article';
   ogImage?: string | null;
+  ogImageAlt?: string;
   noindex?: boolean;
   jsonLd?: unknown;
 };
@@ -16,7 +17,8 @@ const {
   description = siteConfig.description,
   canonical = Astro.url.pathname,
   ogType = 'website',
-  ogImage,
+  ogImage = siteConfig.defaultOgImage,
+  ogImageAlt = siteConfig.defaultOgImageAlt,
   noindex = false,
   jsonLd,
 } = Astro.props;
@@ -34,9 +36,17 @@ const imageUrl = ogImage ? new URL(ogImage, siteConfig.siteUrl).href : undefined
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={siteConfig.name} />
+<meta property="og:locale" content="en_US" />
 {imageUrl && <meta property="og:image" content={imageUrl} />}
+{imageUrl && <meta property="og:image:secure_url" content={imageUrl} />}
+{imageUrl && <meta property="og:image:type" content="image/png" />}
+{imageUrl && <meta property="og:image:width" content="1200" />}
+{imageUrl && <meta property="og:image:height" content="630" />}
+{imageUrl && <meta property="og:image:alt" content={ogImageAlt} />}
 <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={description} />
 {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+{imageUrl && <meta name="twitter:image:alt" content={ogImageAlt} />}
 {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">endlevel website preview</title>
+  <desc id="desc">Catppuccin Mocha TUI preview card for endlevel.</desc>
+  <style>
+    text {
+      font-family: "Iosevka", "JetBrains Mono", "Fira Code", "DejaVu Sans Mono", monospace;
+      letter-spacing: 0;
+    }
+
+    .small {
+      font-size: 25px;
+      font-weight: 500;
+    }
+
+    .body {
+      font-size: 31px;
+      font-weight: 500;
+    }
+
+    .title {
+      font-size: 110px;
+      font-weight: 700;
+    }
+
+    .muted {
+      fill: #a6adc8;
+    }
+
+    .text {
+      fill: #cdd6f4;
+    }
+
+    .strong {
+      fill: #f5e0dc;
+    }
+  </style>
+
+  <rect width="1200" height="630" fill="#1e1e2e" />
+  <rect x="32" y="32" width="1136" height="566" fill="#181825" />
+  <rect x="64" y="76" width="1072" height="430" fill="#1e1e2e" />
+  <path d="M64 76H1136M64 506H1136M64 76V506M1136 76V506" fill="none" stroke="#585b70" stroke-width="3" />
+
+  <rect x="64" y="76" width="1072" height="54" fill="#11111b" />
+  <path d="M64 130H1136" stroke="#585b70" stroke-width="3" />
+  <text x="92" y="112" class="small muted">~/endlevel.tech</text>
+  <text x="1036" y="112" class="small muted">NORMAL</text>
+
+  <text x="96" y="219" class="small muted">01</text>
+  <text x="96" y="274" class="small muted">02</text>
+  <text x="96" y="329" class="small muted">03</text>
+  <text x="96" y="384" class="small muted">04</text>
+
+  <text x="158" y="230" class="small" fill="#f9e2af">fn</text>
+  <text x="214" y="230" class="small" fill="#89b4fa">main</text>
+  <text x="300" y="230" class="small muted">() {</text>
+
+  <text x="158" y="326" class="title strong">endlevel</text>
+  <rect x="692" y="237" width="34" height="92" fill="#cba6f7" />
+
+  <text x="158" y="390" class="body text">a passionate tech enthusiast</text>
+  <text x="158" y="442" class="small muted">linux / devops / sysadmin / low-level</text>
+
+  <rect x="776" y="194" width="272" height="198" fill="#313244" />
+  <path d="M776 194H1048M776 244H1048M776 294H1048M776 344H1048M776 392H1048M776 194V392M1048 194V392" fill="none" stroke="#585b70" stroke-width="3" />
+  <text x="804" y="228" class="small" fill="#a6e3a1">status</text>
+  <text x="804" y="279" class="small text">arch linux</text>
+  <text x="804" y="329" class="small text">void linux</text>
+  <text x="804" y="379" class="small text">nix lab</text>
+  <circle cx="1008" cy="218" r="8" fill="#a6e3a1" />
+  <circle cx="1008" cy="269" r="8" fill="#fab387" />
+  <circle cx="1008" cy="319" r="8" fill="#f38ba8" />
+  <circle cx="1008" cy="369" r="8" fill="#89b4fa" />
+
+  <text x="158" y="476" class="small muted">}</text>
+
+  <g transform="translate(64 534)">
+    <polygon points="0,0 224,0 196,48 0,48" fill="#cba6f7" />
+    <polygon points="196,0 520,0 492,48 168,48" fill="#89b4fa" />
+    <polygon points="492,0 842,0 814,48 464,48" fill="#a6e3a1" />
+    <polygon points="814,0 1072,0 1072,48 786,48" fill="#313244" />
+    <text x="28" y="33" class="small" fill="#1e1e2e">endlevel</text>
+    <text x="236" y="33" class="small" fill="#1e1e2e">github:endlevell</text>
+    <text x="532" y="33" class="small" fill="#1e1e2e">me@endlevel.tech</text>
+    <text x="854" y="33" class="small muted">portfolio</text>
+  </g>
+</svg>

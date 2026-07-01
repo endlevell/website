@@ -30,14 +30,17 @@ async function getDynamicSitemapPages() {
       url: databaseUrl,
       authToken: databaseAuthToken,
     });
-    const projectRows = await client.execute("select slug from projects where status != 'archived'");
-    const postRows = await client.execute('select slug from posts where published = 1');
-    client.close();
+    try {
+      const projectRows = await client.execute("select slug from projects where status != 'archived'");
+      const postRows = await client.execute('select slug from posts where published = 1');
 
-    return [
-      ...projectRows.rows.map((row) => new URL(`/projects/${row.slug}`, site).href),
-      ...postRows.rows.map((row) => new URL(`/blog/${row.slug}`, site).href),
-    ];
+      return [
+        ...projectRows.rows.map((row) => new URL(`/projects/${row.slug}`, site).href),
+        ...postRows.rows.map((row) => new URL(`/blog/${row.slug}`, site).href),
+      ];
+    } finally {
+      client.close();
+    }
   } catch {
     return [];
   }

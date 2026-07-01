@@ -18,7 +18,20 @@ export const client = createClient({
   authToken: databaseAuthToken,
 });
 
-await client.execute('pragma foreign_keys = ON');
-await createSchema(client);
-
 export const db = drizzle(client, { schema });
+
+let databaseReady: Promise<void> | null = null;
+
+async function initializeDatabase(): Promise<void> {
+  await client.execute('pragma foreign_keys = ON');
+  await createSchema(client);
+}
+
+export function ensureDatabase(): Promise<void> {
+  databaseReady ??= initializeDatabase().catch((error: unknown) => {
+    databaseReady = null;
+    throw error;
+  });
+
+  return databaseReady;
+}

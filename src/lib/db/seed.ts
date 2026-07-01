@@ -1,4 +1,4 @@
-import { db } from './client';
+import { db, ensureDatabase } from './client';
 import { posts, projects } from './schema';
 
 const now = new Date();
@@ -155,6 +155,8 @@ The notebook is not for perfect documentation. It is for keeping enough context 
     updatedAt: earlier(1),
   },
 ];
+
+await ensureDatabase();
 
 for (const project of projectSeeds) {
   await db.insert(projects).values(project).onConflictDoNothing({ target: projects.slug }).run();

@@ -4,8 +4,10 @@ export const siteConfig = {
   tagline: 'a passionate tech enthusiast',
   description:
     'A high school student exploring Linux, DevOps, sysadmin work, software engineering, and low-level programming.',
-  siteUrl: import.meta.env.SITE_URL ?? 'https://endlevel.dev',
-  email: 'me@endlevel.dev',
+  siteUrl: import.meta.env.SITE_URL ?? 'https://endlevel.tech',
+  defaultOgImage: '/og-card.png',
+  defaultOgImageAlt: 'endlevel portfolio preview card with a Catppuccin Mocha TUI layout.',
+  email: 'me@endlevel.tech',
   githubName: 'endlevell',
   githubUrl: 'https://github.com/endlevell',
   discord: 'endlevel',

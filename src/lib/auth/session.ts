@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import type { AstroCookies } from 'astro';
 import { and, eq, gt, lt } from 'drizzle-orm';
-import { db } from '../db/client';
+import { db, ensureDatabase } from '../db/client';
 import { adminSessions } from '../db/schema';
 
 const sessionDays = 7;
@@ -36,6 +36,8 @@ export async function validateSessionToken(token: string | null): Promise<AdminS
     return null;
   }
 
+  await ensureDatabase();
+
   const idHash = hashToken(token);
   const now = new Date();
   const row = await db
@@ -48,6 +50,8 @@ export async function validateSessionToken(token: string | null): Promise<AdminS
 }
 
 export async function createAdminSession(cookies: AstroCookies, requestUrl: URL): Promise<AdminSession> {
+  await ensureDatabase();
+
   const token = randomBytes(32).toString('base64url');
   const idHash = hashToken(token);
   const now = new Date();
@@ -76,6 +80,7 @@ export async function destroyAdminSession(cookies: AstroCookies): Promise<void> 
   const token = readSessionToken(cookies);
 
   if (token) {
+    await ensureDatabase();
     await db.delete(adminSessions).where(eq(adminSessions.id, hashToken(token))).run();
   }
 
@@ -83,5 +88,7 @@ export async function destroyAdminSession(cookies: AstroCookies): Promise<void> 
 }
 
 export async function pruneExpiredSessions(): Promise<void> {
+  await ensureDatabase();
+
   await db.delete(adminSessions).where(lt(adminSessions.expiresAt, new Date())).run();
 }

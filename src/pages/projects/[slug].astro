@@ -1,0 +1,104 @@
+---
+import MarkdownBody from '../../components/ui/MarkdownBody.astro';
+import BackLink from '../../components/ui/BackLink.astro';
+import TagPill from '../../components/ui/TagPill.astro';
+import TerminalWindow from '../../components/ui/TerminalWindow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjectBySlug } from '../../lib/db/queries';
+import { renderMarkdown } from '../../lib/markdown/render';
+
+export const prerender = false;
+
+const slug = Astro.params.slug ?? '';
+const project = await getProjectBySlug(slug);
+
+if (!project) {
+  Astro.response.status = 404;
+}
+
+const html = project ? await renderMarkdown(project.body) : '';
+---
+
+<BaseLayout
+  title={project?.title ?? 'not found'}
+  description={project?.summary ?? 'Project not found.'}
+>
+  <TerminalWindow path={project ? `~/projects/${project.slug}` : '~/404'}>
+    {project ? (
+      <article>
+        <nav class="detail-nav" aria-label="Project navigation">
+          <BackLink href="/projects" label="back ~/projects" />
+        </nav>
+        <header class="detail-head">
+          <p class="section-label">$ cat project.md</p>
+          <h1>{project.title}</h1>
+          <p>{project.summary}</p>
+          <div class="tags">
+            {project.techTagsList.map((tag) => <TagPill tag={tag} />)}
+          </div>
+          <div class="links">
+            {project.repoUrl && <a class="terminal-link" href={project.repoUrl}>repo</a>}
+            {project.liveUrl && <a class="terminal-link" href={project.liveUrl}>live</a>}
+          </div>
+        </header>
+        <MarkdownBody html={html} />
+      </article>
+    ) : (
+      <section class="missing">
+        <h1>command not found</h1>
+        <p>bash: /projects/{slug}: no such file or directory</p>
+        <a class="terminal-link" href="/projects">back to projects</a>
+      </section>
+    )}
+  </TerminalWindow>
+</BaseLayout>
+
+<style>
+  .detail-head {
+    border-bottom: 1px solid var(--border-muted);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .detail-nav {
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    letter-spacing: 0;
+    line-height: 1;
+    margin: 0.25rem 0 0.8rem;
+  }
+
+  .detail-head p:not(.section-label) {
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 72ch;
+  }
+
+  .tags,
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    margin-top: 0.9rem;
+  }
+
+  .missing p {
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 560px) {
+    h1 {
+      font-size: clamp(1.45rem, 9vw, 2rem);
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .links {
+      gap: 0.45rem;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+type Props = {
+  tag: string;
+  href?: string;
+};
+
+import Badge from './Badge.astro';
+
+const { tag, href } = Astro.props;
+---
+
+<Badge text={tag} href={href} tone="secondary" compact />

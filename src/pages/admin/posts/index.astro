@@ -1,0 +1,120 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getAdminPosts } from '../../../lib/admin/data';
+
+export const prerender = false;
+
+const rows = await getAdminPosts();
+---
+
+<AdminLayout title="posts">
+  <header class="page-head">
+    <p class="section-label">~/admin/posts</p>
+    <h1>posts</h1>
+    <a class="new-link" href="/admin/posts/new">new post</a>
+  </header>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>title</th>
+          <th>state</th>
+          <th>published</th>
+          <th>updated</th>
+          <th>actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((post) => (
+          <tr>
+            <td><a href={`/blog/${post.slug}`}>{post.title}</a></td>
+            <td>{post.published ? 'published' : 'draft'}</td>
+            <td>{post.publishedAt ? post.publishedAt.toISOString().slice(0, 10) : '-'}</td>
+            <td>{post.updatedAt.toISOString().slice(0, 10)}</td>
+            <td class="actions">
+              <a href={`/admin/posts/${post.id}/edit`}>edit</a>
+              <form method="post" action={`/api/admin/posts/${post.id}`}>
+                <input type="hidden" name="intent" value="delete" />
+                <button type="submit">delete</button>
+              </form>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-head {
+    align-items: end;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    margin: 0.2rem 0 0;
+  }
+
+  .new-link {
+    background: var(--accent-primary);
+    color: var(--bg-base);
+    font-weight: 700;
+    padding: 0.35rem 0.6rem;
+    text-decoration: none;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--border-muted);
+    padding: 0.6rem 0.5rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    color: var(--accent-secondary);
+    font-weight: 700;
+  }
+
+  .actions {
+    align-items: center;
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  button {
+    background: var(--color-danger);
+    border: 0;
+    color: var(--bg-base);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.25rem 0.45rem;
+  }
+
+  @media (max-width: 680px) {
+    .page-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    table {
+      min-width: 40rem;
+    }
+  }
+</style>

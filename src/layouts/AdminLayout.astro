@@ -1,0 +1,114 @@
+---
+import Font from 'astro/components/Font.astro';
+import '../styles/global.css';
+
+type Props = {
+  title: string;
+};
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#1e1e2e" />
+    <Font cssVariable="--font-mono" preload={true} />
+    <title>{title} | admin | endlevel</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#admin-main">skip to content</a>
+    <div class="admin-shell">
+      <header class="admin-top">
+        <a class="admin-brand" href="/admin">endlevel admin</a>
+        <nav aria-label="Admin navigation">
+          <a href="/admin/projects">projects</a>
+          <a href="/admin/posts">posts</a>
+          <a href="/">site</a>
+        </nav>
+        <form method="post" action="/api/admin/logout">
+          <button type="submit">logout</button>
+        </form>
+      </header>
+      <main id="admin-main" class="admin-main">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
+
+<style>
+  .admin-shell {
+    border-left: 1px solid var(--border-muted);
+    border-right: 1px solid var(--border-muted);
+    margin: 0 auto;
+    min-height: 100dvh;
+    width: var(--content-width);
+  }
+
+  .admin-top {
+    align-items: center;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    min-width: 0;
+  }
+
+  .admin-brand {
+    color: var(--text-strong);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  nav a {
+    text-decoration: none;
+  }
+
+  button {
+    background: var(--color-danger);
+    border: 0;
+    color: var(--bg-base);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.25rem 0.55rem;
+  }
+
+  .admin-main {
+    padding: 0.75rem;
+  }
+
+  @media (max-width: 680px) {
+    .admin-shell {
+      border: 0;
+    }
+
+    .admin-top {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.55rem;
+      padding: 0.55rem;
+    }
+
+    nav {
+      gap: 0.55rem;
+    }
+
+    .admin-main {
+      padding: 0.55rem;
+    }
+  }
+</style>

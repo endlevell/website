@@ -1,0 +1,33 @@
+---
+type Props = {
+  command: string;
+  message: string;
+};
+
+const { command, message } = Astro.props;
+---
+
+<div class="empty-state">
+  <p><span>$</span> {command}</p>
+  <p>{message}</p>
+</div>
+
+<style>
+  .empty-state {
+    border: 1px dashed var(--border-muted);
+    color: var(--text-muted);
+    padding: 1rem;
+  }
+
+  .empty-state p {
+    margin: 0;
+  }
+
+  .empty-state p + p {
+    margin-top: 0.45rem;
+  }
+
+  .empty-state span {
+    color: var(--accent-primary);
+  }
+</style>

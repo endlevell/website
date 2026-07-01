@@ -1,0 +1,58 @@
+---
+import PowerSegment from '../ui/PowerSegment.astro';
+import { siteConfig } from '../../lib/config/site';
+---
+
+<footer class="footer">
+  <p><span class="prompt">:</span>contact <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> | discord {siteConfig.discord}</p>
+  <div class="commandline power-strip" aria-hidden="true">
+    <PowerSegment text="CMD" tone="magic" compact />
+    <PowerSegment text=":open ~/projects" tone="base" compact />
+    <PowerSegment text=":read ~/blog" tone="muted" compact />
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg-base);
+    border-top: 1px solid var(--border-muted);
+    color: var(--text-muted);
+    display: grid;
+    gap: 0.2rem;
+    min-height: 1.8rem;
+    padding: 0.2rem 0.75rem;
+  }
+
+  .footer p {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .commandline {
+    font-size: 0.82rem;
+    margin-top: 0.2rem;
+    min-height: 1.35rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .commandline::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prompt {
+    color: var(--accent-primary);
+    margin-right: 0.25rem;
+  }
+
+  @media (max-width: 560px) {
+    .footer {
+      padding: 0.35rem 0.5rem 0.45rem;
+    }
+
+    .commandline :global(.power-segment) {
+      font-size: 0.72rem;
+    }
+  }
+</style>

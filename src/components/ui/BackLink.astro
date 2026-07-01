@@ -1,0 +1,56 @@
+---
+type Props = {
+  href: string;
+  label: string;
+};
+
+const { href, label } = Astro.props;
+---
+
+<a class="back-link" href={href}>
+  <span aria-hidden="true">esc</span>
+  <span>{label}</span>
+</a>
+
+<style>
+  .back-link {
+    align-items: center;
+    background: var(--bg-base);
+    border: 1px solid var(--border-muted);
+    color: var(--text-default);
+    display: inline-flex;
+    font-weight: 700;
+    gap: 0.55rem;
+    max-width: 100%;
+    min-height: 2rem;
+    overflow: hidden;
+    padding: 0 0.65rem;
+    text-decoration: none;
+  }
+
+  .back-link span:first-child {
+    background: var(--accent-primary);
+    color: var(--bg-base);
+    margin-left: -0.65rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .back-link span:last-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .back-link:hover {
+    background: var(--bg-hover);
+    color: var(--text-strong);
+  }
+
+  @media (max-width: 520px) {
+    .back-link {
+      width: 100%;
+    }
+  }
+</style>

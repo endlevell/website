@@ -1,0 +1,97 @@
+---
+type Props = {
+  text: string;
+  tone?: 'primary' | 'deep' | 'muted' | 'secondary' | 'base' | 'warning' | 'success' | 'magic';
+  compact?: boolean;
+  href?: string;
+  current?: boolean;
+};
+
+const { text, tone = 'muted', compact = false, href, current = false } = Astro.props;
+const classes = ['power-segment', `tone-${tone}`, { compact, current }];
+---
+
+{href ? <a class:list={classes} href={href} aria-current={current ? 'page' : undefined}>{text}</a> : <span class:list={classes}>{text}</span>}
+
+<style>
+  .power-segment {
+    --seg-bg: var(--border-muted);
+    --seg-fg: var(--text-default);
+    --seg-height: var(--power-h);
+    --seg-slant: var(--power-notch);
+    --seg-pad-x: 0.75rem;
+    align-items: center;
+    background: var(--seg-bg);
+    clip-path: inset(0);
+    color: var(--seg-fg);
+    display: inline-flex;
+    font-size: 0.86rem;
+    font-weight: 600;
+    height: var(--seg-height);
+    line-height: 1;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0 calc(var(--seg-pad-x) + var(--seg-slant)) 0 calc(var(--seg-pad-x) + var(--seg-slant));
+    position: relative;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .compact {
+    --seg-height: var(--power-h-compact);
+    --seg-slant: var(--power-notch-compact);
+    --seg-pad-x: 0.58rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .tone-primary {
+    --seg-bg: var(--accent-primary);
+    --seg-fg: var(--bg-base);
+  }
+
+  .tone-deep {
+    --seg-bg: var(--accent-tertiary);
+    --seg-fg: var(--bg-base);
+  }
+
+  .tone-muted {
+    --seg-bg: var(--mocha-surface2);
+    --seg-fg: var(--mocha-text);
+  }
+
+  .tone-secondary {
+    --seg-bg: var(--accent-secondary);
+    --seg-fg: var(--bg-base);
+  }
+
+  .tone-base {
+    --seg-bg: var(--bg-hover);
+    --seg-fg: var(--text-default);
+  }
+
+  .tone-warning {
+    --seg-bg: var(--color-warning);
+    --seg-fg: var(--bg-base);
+  }
+
+  .tone-success {
+    --seg-bg: var(--color-success);
+    --seg-fg: var(--bg-base);
+  }
+
+  .tone-magic {
+    --seg-bg: var(--color-magic);
+    --seg-fg: var(--bg-base);
+  }
+
+  a.power-segment:hover {
+    color: var(--seg-fg);
+    filter: brightness(1.08);
+  }
+
+  a.power-segment:focus-visible {
+    outline-offset: -2px;
+  }
+</style>

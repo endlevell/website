@@ -1,0 +1,101 @@
+---
+import type { PostRow } from '../../lib/db/schema';
+
+type Props = {
+  action: string;
+  post?: PostRow | null;
+};
+
+const { action, post = null } = Astro.props;
+const tags = post ? JSON.parse(post.tags).join(', ') : '';
+---
+
+<form class="admin-form" method="post" action={action}>
+  <label>
+    title
+    <input name="title" value={post?.title ?? ''} required maxlength="180" />
+  </label>
+  <label>
+    slug
+    <input name="slug" value={post?.slug ?? ''} pattern="[a-z0-9]+(-[a-z0-9]+)*" maxlength="110" />
+  </label>
+  <label>
+    excerpt
+    <textarea name="excerpt" rows="3" required maxlength="320">{post?.excerpt ?? ''}</textarea>
+  </label>
+  <label>
+    body
+    <textarea name="body" rows="18" required>{post?.body ?? ''}</textarea>
+  </label>
+  <label>
+    tags
+    <input name="tags" value={tags} required placeholder="linux, notes" />
+  </label>
+  <label>
+    cover image
+    <input name="coverImage" value={post?.coverImage ?? ''} />
+  </label>
+  <label class="check-row">
+    <input name="published" type="checkbox" checked={post?.published ?? false} />
+    published
+  </label>
+  <div class="actions">
+    <button type="submit">save</button>
+    <a href="/admin/posts">cancel</a>
+  </div>
+</form>
+
+<style>
+  .admin-form {
+    display: grid;
+    gap: 0.8rem;
+    max-width: 900px;
+  }
+
+  label {
+    color: var(--text-muted);
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  input,
+  textarea {
+    background: var(--bg-hover);
+    border: 1px solid var(--border-muted);
+    color: var(--text-default);
+    min-width: 0;
+    padding: 0.45rem 0.55rem;
+    width: 100%;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .check-row {
+    align-items: center;
+    display: flex;
+  }
+
+  .actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  button {
+    background: var(--accent-primary);
+    border: 0;
+    color: var(--bg-base);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.45rem 0.75rem;
+  }
+
+  @media (max-width: 680px) {
+    .admin-form {
+      max-width: none;
+    }
+  }
+</style>

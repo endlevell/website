@@ -1,0 +1,122 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getAdminProjects } from '../../../lib/admin/data';
+
+export const prerender = false;
+
+const rows = await getAdminProjects();
+---
+
+<AdminLayout title="projects">
+  <header class="page-head">
+    <p class="section-label">~/admin/projects</p>
+    <h1>projects</h1>
+    <a class="new-link" href="/admin/projects/new">new project</a>
+  </header>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>title</th>
+          <th>status</th>
+          <th>featured</th>
+          <th>sort</th>
+          <th>updated</th>
+          <th>actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((project) => (
+          <tr>
+            <td><a href={`/projects/${project.slug}`}>{project.title}</a></td>
+            <td>{project.status}</td>
+            <td>{project.featured ? 'yes' : 'no'}</td>
+            <td>{project.sortOrder}</td>
+            <td>{project.updatedAt.toISOString().slice(0, 10)}</td>
+            <td class="actions">
+              <a href={`/admin/projects/${project.id}/edit`}>edit</a>
+              <form method="post" action={`/api/admin/projects/${project.id}`}>
+                <input type="hidden" name="intent" value="delete" />
+                <button type="submit">delete</button>
+              </form>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-head {
+    align-items: end;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    margin: 0.2rem 0 0;
+  }
+
+  .new-link {
+    background: var(--accent-primary);
+    color: var(--bg-base);
+    font-weight: 700;
+    padding: 0.35rem 0.6rem;
+    text-decoration: none;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--border-muted);
+    padding: 0.6rem 0.5rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    color: var(--accent-secondary);
+    font-weight: 700;
+  }
+
+  .actions {
+    align-items: center;
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  button {
+    background: var(--color-danger);
+    border: 0;
+    color: var(--bg-base);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.25rem 0.45rem;
+  }
+
+  @media (max-width: 680px) {
+    .page-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    table {
+      min-width: 44rem;
+    }
+  }
+</style>

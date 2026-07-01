@@ -1,0 +1,75 @@
+---
+import Hero from '../components/home/Hero.astro';
+import TechStack from '../components/home/TechStack.astro';
+import PostList from '../components/blog/PostList.astro';
+import ProjectList from '../components/projects/ProjectList.astro';
+import TerminalWindow from '../components/ui/TerminalWindow.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../lib/config/site';
+import { getFeaturedProjects, getPublishedPosts } from '../lib/db/queries';
+import { personJsonLd } from '../lib/seo/jsonLd';
+
+export const prerender = true;
+
+const featuredProjects = await getFeaturedProjects(3);
+const latestPosts = await getPublishedPosts(3);
+---
+
+<BaseLayout title={siteConfig.name} description={siteConfig.description} jsonLd={personJsonLd()}>
+  <Hero />
+
+  <div class="home-grid">
+    <TechStack />
+
+    <TerminalWindow path="~/projects --featured">
+      <div class="section-head">
+        <h2>featured projects</h2>
+        <a class="terminal-link" href="/projects">all projects</a>
+      </div>
+      <ProjectList projects={featuredProjects} />
+    </TerminalWindow>
+
+    <TerminalWindow path="~/blog --latest">
+      <div class="section-head">
+        <h2>latest posts</h2>
+        <a class="terminal-link" href="/blog">all posts</a>
+      </div>
+      <PostList posts={latestPosts} />
+    </TerminalWindow>
+  </div>
+</BaseLayout>
+
+<style>
+  .home-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .section-head {
+    align-items: baseline;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    color: var(--text-strong);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  @media (max-width: 680px) {
+    .section-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .home-grid {
+      gap: 0.7rem;
+    }
+  }
+</style>

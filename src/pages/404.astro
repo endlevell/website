@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TerminalWindow from '../components/ui/TerminalWindow.astro';
+
+export const prerender = true;
+
+Astro.response.status = 404;
+---
+
+<BaseLayout title="404" description="Page not found.">
+  <TerminalWindow path="~/404">
+    <section class="not-found">
+      <p class="section-label">$ bash {Astro.url.pathname}</p>
+      <h1>command not found</h1>
+      <p>bash: {Astro.url.pathname}: no such file or directory</p>
+      <a class="terminal-link" href="/">return home</a>
+    </section>
+  </TerminalWindow>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 42dvh;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    font-size: clamp(1.6rem, 5vw, 3rem);
+    letter-spacing: 0;
+    line-height: 1;
+    margin: 0.4rem 0 1rem;
+  }
+
+  p:not(.section-label) {
+    color: var(--text-muted);
+  }
+</style>

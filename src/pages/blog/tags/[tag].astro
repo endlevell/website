@@ -1,0 +1,45 @@
+---
+import PostList from '../../../components/blog/PostList.astro';
+import TerminalWindow from '../../../components/ui/TerminalWindow.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getPostsByTag } from '../../../lib/db/queries';
+
+export const prerender = false;
+
+const tag = Astro.params.tag ?? '';
+const posts = await getPostsByTag(tag);
+
+if (posts.length === 0) {
+  Astro.response.status = 404;
+}
+---
+
+<BaseLayout title={`tag ${tag}`} description={`Posts tagged ${tag}.`}>
+  <TerminalWindow path={`~/blog/tags/${tag}`}>
+    <header class="page-head">
+      <p class="section-label">$ grep -R "[{tag}]" ~/blog</p>
+      <h1>[{tag}]</h1>
+      <p>{posts.length} matching post{posts.length === 1 ? '' : 's'}</p>
+    </header>
+    <PostList posts={posts} />
+  </TerminalWindow>
+</BaseLayout>
+
+<style>
+  .page-head {
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    letter-spacing: 0;
+    line-height: 1;
+    margin: 0.25rem 0 0.7rem;
+  }
+
+  .page-head p:last-child {
+    color: var(--text-muted);
+    margin: 0;
+  }
+</style>

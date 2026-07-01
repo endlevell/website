@@ -1,0 +1,21 @@
+---
+import AdminPostForm from '../../../components/admin/AdminPostForm.astro';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+export const prerender = false;
+---
+
+<AdminLayout title="new post">
+  <header class="page-head">
+    <p class="section-label">~/admin/posts/new</p>
+    <h1>new post</h1>
+  </header>
+  <AdminPostForm action="/api/admin/posts" />
+</AdminLayout>
+
+<style>
+  h1 {
+    color: var(--text-strong);
+    margin: 0.2rem 0 1rem;
+  }
+</style>

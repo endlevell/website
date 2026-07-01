@@ -1,0 +1,94 @@
+---
+import { formatDate } from '../../lib/format/date';
+import type { Post } from '../../lib/db/types';
+import Badge from '../ui/Badge.astro';
+import EmptyState from '../ui/EmptyState.astro';
+import TagPill from '../ui/TagPill.astro';
+
+type Props = {
+  posts: Post[];
+};
+
+const { posts } = Astro.props;
+---
+
+{posts.length === 0 ? (
+  <EmptyState command="find ~/blog -type f" message="no published posts yet" />
+) : (
+  <div class="post-list" role="list">
+    {posts.map((post) => (
+      <article class="post-row" role="listitem">
+        <time datetime={post.publishedAt?.toISOString()}>
+          <Badge text={formatDate(post.publishedAt)} tone="magic" compact />
+        </time>
+        <div class="row-main">
+          <a href={`/blog/${post.slug}`}>{post.title}</a>
+          <p>{post.excerpt}</p>
+          <div class="row-tags" aria-label={`${post.title} tags`}>
+            {post.tagList.map((tag) => (
+              <TagPill tag={tag} href={`/blog/tags/${tag}`} />
+            ))}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+)}
+
+<style>
+  .post-list {
+    border-top: 1px solid var(--border-muted);
+  }
+
+  .post-row {
+    border-bottom: 1px solid var(--border-muted);
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    min-width: 0;
+    padding: 1rem 0;
+  }
+
+  time {
+    font-size: 0.86rem;
+  }
+
+  .row-main a {
+    color: var(--text-strong);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+  }
+
+  .row-main a::before {
+    color: var(--accent-primary);
+    content: "./";
+    font-weight: 400;
+  }
+
+  .row-main p {
+    color: var(--text-muted);
+    margin: 0.25rem 0 0.55rem;
+    overflow-wrap: anywhere;
+  }
+
+  .row-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+  }
+
+  @media (max-width: 680px) {
+    .post-row {
+      gap: 0.35rem;
+      grid-template-columns: 1fr;
+      padding: 0.85rem 0;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .row-tags {
+      gap: 0.32rem;
+    }
+  }
+</style>

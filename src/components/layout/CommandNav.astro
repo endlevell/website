@@ -1,0 +1,85 @@
+---
+import PowerSegment from '../ui/PowerSegment.astro';
+import { siteConfig } from '../../lib/config/site';
+
+const links = [
+  { href: '/', label: 'home' },
+  { href: '/projects', label: 'projects' },
+  { href: '/blog', label: 'blog' },
+  { href: siteConfig.githubUrl, label: 'github' },
+] as const;
+
+const pathname = Astro.url.pathname;
+---
+
+<nav class="command-nav" aria-label="Main navigation">
+  <div class="tabs power-strip">
+    <PowerSegment text="endlevel" href="/" tone="deep" />
+    {links.map((link, index) => {
+      const active = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+      return <PowerSegment text={`${index + 1}:${link.label}`} href={link.href} tone={active ? 'primary' : 'base'} current={active} />;
+    })}
+  </div>
+</nav>
+
+<style>
+  .command-nav {
+    --power-h: 2rem;
+    --power-notch: 0.82rem;
+    align-items: center;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-muted);
+    display: flex;
+    min-height: 2rem;
+    overflow: hidden;
+  }
+
+  .tabs {
+    flex: 1;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs :global(.power-segment:first-child) {
+    font-weight: 700;
+  }
+
+  @media (max-width: 680px) {
+    .command-nav {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .tabs {
+      display: flex;
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .tabs :global(.power-segment) {
+      --seg-pad-x: 0.38rem;
+      flex: 0 0 auto;
+      font-size: 0.72rem;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .command-nav {
+      --power-h: 1.65rem;
+      --power-notch: 0.5rem;
+    }
+
+    .tabs :global(.power-segment) {
+      --seg-pad-x: 0.3rem;
+      font-size: 0.68rem;
+    }
+  }
+</style>

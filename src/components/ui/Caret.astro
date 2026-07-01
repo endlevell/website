@@ -1,0 +1,21 @@
+<span class="caret" aria-hidden="true">█</span>
+
+<style>
+  .caret {
+    color: var(--accent-primary);
+    display: inline-block;
+    margin-left: 0.15em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .caret {
+      animation: blink 1.05s steps(1, end) infinite;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+type Props = {
+  path: string;
+  title?: string;
+  meta?: string;
+};
+
+import PowerSegment from './PowerSegment.astro';
+
+const { path, title = path, meta = 'buf' } = Astro.props;
+---
+
+<section class="terminal-window" aria-label={title}>
+  <header class="terminal-bar" aria-hidden="true">
+    <div class="bar-segments power-strip">
+      <PowerSegment text={path} tone="deep" compact />
+      <PowerSegment text={meta} tone="base" compact />
+    </div>
+  </header>
+  <div class="terminal-body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .terminal-window {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-muted);
+    color: var(--text-default);
+    min-width: 0;
+  }
+
+  .terminal-bar {
+    align-items: center;
+    border-bottom: 1px solid var(--border-muted);
+    display: flex;
+    min-height: 1.4rem;
+    padding: 0;
+  }
+
+  .bar-segments {
+    min-width: 0;
+    overflow: hidden;
+    padding-right: var(--power-notch-compact);
+  }
+
+  .bar-segments :global(.power-segment:first-child) {
+    max-width: min(72vw, 42rem);
+  }
+
+  .terminal-body {
+    padding: 0.75rem;
+    min-width: 0;
+  }
+
+  @media (max-width: 560px) {
+    .terminal-body {
+      padding: 0.55rem;
+    }
+
+    .bar-segments :global(.power-segment:first-child) {
+      max-width: 70vw;
+    }
+  }
+</style>

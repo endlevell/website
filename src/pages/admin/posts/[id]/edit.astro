@@ -1,0 +1,38 @@
+---
+import AdminPostForm from '../../../../components/admin/AdminPostForm.astro';
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import { getAdminPost } from '../../../../lib/admin/data';
+
+export const prerender = false;
+
+const id = Number(Astro.params.id);
+const post = Number.isInteger(id) ? await getAdminPost(id) : null;
+
+if (!post) {
+  Astro.response.status = 404;
+}
+---
+
+<AdminLayout title={post ? `edit ${post.title}` : 'post not found'}>
+  {post ? (
+    <>
+      <header class="page-head">
+        <p class="section-label">~/admin/posts/{post.id}/edit</p>
+        <h1>edit post</h1>
+      </header>
+      <AdminPostForm action={`/api/admin/posts/${post.id}`} post={post} />
+    </>
+  ) : (
+    <section>
+      <h1>post not found</h1>
+      <a href="/admin/posts">back</a>
+    </section>
+  )}
+</AdminLayout>
+
+<style>
+  h1 {
+    color: var(--text-strong);
+    margin: 0.2rem 0 1rem;
+  }
+</style>

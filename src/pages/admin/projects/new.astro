@@ -1,0 +1,21 @@
+---
+import AdminProjectForm from '../../../components/admin/AdminProjectForm.astro';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+export const prerender = false;
+---
+
+<AdminLayout title="new project">
+  <header class="page-head">
+    <p class="section-label">~/admin/projects/new</p>
+    <h1>new project</h1>
+  </header>
+  <AdminProjectForm action="/api/admin/projects" />
+</AdminLayout>
+
+<style>
+  h1 {
+    color: var(--text-strong);
+    margin: 0.2rem 0 1rem;
+  }
+</style>

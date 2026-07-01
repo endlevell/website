@@ -1,0 +1,55 @@
+---
+import PostList from '../../components/blog/PostList.astro';
+import TagPill from '../../components/ui/TagPill.astro';
+import TerminalWindow from '../../components/ui/TerminalWindow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllTags, getPublishedPosts } from '../../lib/db/queries';
+
+export const prerender = false;
+
+const posts = await getPublishedPosts();
+const tags = await getAllTags();
+---
+
+<BaseLayout title="blog" description="Journal posts and technical notes from endlevel.">
+  <TerminalWindow path="~/blog">
+    <header class="page-head">
+      <p class="section-label">$ find ~/blog -type f</p>
+      <h1>blog</h1>
+      <p>Markdown notes on Linux, software, sysadmin work, and the things learned while breaking setups.</p>
+      <div class="tags">
+        {tags.map(({ tag, count }) => (
+          <TagPill tag={`${tag}:${count}`} href={`/blog/tags/${tag}`} />
+        ))}
+      </div>
+    </header>
+    <PostList posts={posts} />
+  </TerminalWindow>
+</BaseLayout>
+
+<style>
+  .page-head {
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    letter-spacing: 0;
+    line-height: 1;
+    margin: 0.25rem 0 0.7rem;
+  }
+
+  .page-head p:last-of-type {
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 74ch;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+    margin-top: 1rem;
+  }
+</style>

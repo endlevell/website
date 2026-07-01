@@ -1,0 +1,193 @@
+---
+import { siteConfig } from '../../lib/config/site';
+import Caret from '../ui/Caret.astro';
+import Badge from '../ui/Badge.astro';
+---
+
+<section class="hero" aria-labelledby="home-title">
+  <div class="editor-frame">
+    <div class="buffer-title">~/home/profile.lua</div>
+    <div class="editor-grid">
+      <div class="gutter" aria-hidden="true">
+        {Array.from({ length: 11 }, (_, index) => <span>{index + 1}</span>)}
+      </div>
+      <div class="buffer-copy">
+        <p class="comment">-- current buffer</p>
+        <h1 id="home-title">{siteConfig.name}<Caret /></h1>
+        <p class="tagline" data-typewriter data-text={siteConfig.tagline}>{siteConfig.tagline}</p>
+        <div class="bio">
+          {siteConfig.bio.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="info-pane" aria-label="Profile metadata">
+    <div class="buffer-title">~/home/status.rs</div>
+    <div class="status-grid">
+      <p><Badge text="user" tone="primary" compact /><code>{siteConfig.handle}</code></p>
+      <p><Badge text="github" tone="magic" compact /><a href={siteConfig.githubUrl}>{siteConfig.githubName}</a></p>
+      <p><Badge text="mail" tone="secondary" compact /><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
+      <p><Badge text="focus" tone="magic" compact /><code>linux/devops/low-level</code></p>
+      <p><Badge text="device" tone="base" compact /><code>POCO F3</code></p>
+      <p><Badge text="rom" tone="muted" compact /><code>PixelOS A16 QPR2</code></p>
+    </div>
+  </aside>
+</section>
+
+<style>
+  .hero {
+    align-items: start;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    min-height: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .editor-frame,
+  .info-pane {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-muted);
+    min-height: 0;
+    min-width: 0;
+  }
+
+  .buffer-title {
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-muted);
+    color: var(--accent-secondary);
+    min-height: 1.8rem;
+    overflow: hidden;
+    padding: 0.2rem 0.6rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+  }
+
+  .gutter {
+    border-right: 1px solid var(--border-muted);
+    color: var(--border-muted);
+    display: grid;
+    padding: 0.75rem 0.7rem 0.75rem 0;
+    text-align: right;
+    user-select: none;
+  }
+
+  .gutter span:nth-child(5) {
+    color: var(--accent-primary);
+  }
+
+  .buffer-copy {
+    padding: clamp(1rem, 3vw, 2rem);
+    min-width: 0;
+  }
+
+  .comment {
+    color: var(--border-muted);
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    font-size: clamp(2rem, 6vw, 4.8rem);
+    letter-spacing: 0;
+    line-height: 0.96;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .tagline {
+    color: var(--accent-primary);
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    margin: 1.25rem 0 0;
+    min-height: 2.1rem;
+  }
+
+  .bio {
+    margin-top: 1.5rem;
+    max-width: 68ch;
+  }
+
+  .bio p {
+    color: var(--text-muted);
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .bio p + p {
+    margin-top: 1rem;
+  }
+
+  .status-grid {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.75rem;
+  }
+
+  .status-grid p {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 5.8rem minmax(0, 1fr);
+    margin: 0;
+    min-width: 0;
+  }
+
+  code {
+    color: var(--text-default);
+    font-family: inherit;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .editor-grid {
+      grid-template-columns: 2.6rem minmax(0, 1fr);
+    }
+
+    .buffer-copy {
+      padding: 0.85rem;
+    }
+
+    .gutter {
+      padding-right: 0.45rem;
+    }
+
+    .status-grid p {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .editor-grid {
+      grid-template-columns: 2.1rem minmax(0, 1fr);
+    }
+
+    .gutter {
+      font-size: 0.72rem;
+      padding: 0.65rem 0.35rem 0.65rem 0;
+    }
+
+    .tagline {
+      min-height: 0;
+    }
+
+    .status-grid {
+      gap: 0.55rem;
+      padding: 0.55rem;
+    }
+  }
+</style>

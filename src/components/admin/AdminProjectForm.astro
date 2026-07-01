@@ -1,0 +1,136 @@
+---
+import type { ProjectRow } from '../../lib/db/schema';
+
+type Props = {
+  action: string;
+  project?: ProjectRow | null;
+};
+
+const { action, project = null } = Astro.props;
+const tags = project ? JSON.parse(project.techTags).join(', ') : '';
+---
+
+<form class="admin-form" method="post" action={action}>
+  <label>
+    title
+    <input name="title" value={project?.title ?? ''} required maxlength="160" />
+  </label>
+  <label>
+    slug
+    <input name="slug" value={project?.slug ?? ''} pattern="[a-z0-9]+(-[a-z0-9]+)*" maxlength="96" />
+  </label>
+  <label>
+    summary
+    <textarea name="summary" rows="3" required maxlength="280">{project?.summary ?? ''}</textarea>
+  </label>
+  <label>
+    body
+    <textarea name="body" rows="16" required>{project?.body ?? ''}</textarea>
+  </label>
+  <label>
+    tech tags
+    <input name="techTags" value={tags} required placeholder="linux, rust, devops" />
+  </label>
+  <div class="form-grid">
+    <label>
+      repo url
+      <input name="repoUrl" value={project?.repoUrl ?? ''} inputmode="url" />
+    </label>
+    <label>
+      live url
+      <input name="liveUrl" value={project?.liveUrl ?? ''} inputmode="url" />
+    </label>
+  </div>
+  <label>
+    cover image
+    <input name="coverImage" value={project?.coverImage ?? ''} />
+  </label>
+  <div class="form-grid">
+    <label>
+      status
+      <select name="status">
+        {['active', 'wip', 'archived'].map((status) => (
+          <option value={status} selected={(project?.status ?? 'active') === status}>{status}</option>
+        ))}
+      </select>
+    </label>
+    <label>
+      sort order
+      <input name="sortOrder" type="number" min="0" max="10000" value={project?.sortOrder ?? 0} />
+    </label>
+  </div>
+  <label class="check-row">
+    <input name="featured" type="checkbox" checked={project?.featured ?? false} />
+    featured
+  </label>
+  <div class="actions">
+    <button type="submit">save</button>
+    <a href="/admin/projects">cancel</a>
+  </div>
+</form>
+
+<style>
+  .admin-form {
+    display: grid;
+    gap: 0.8rem;
+    max-width: 900px;
+  }
+
+  label {
+    color: var(--text-muted);
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  input,
+  textarea,
+  select {
+    background: var(--bg-hover);
+    border: 1px solid var(--border-muted);
+    color: var(--text-default);
+    min-width: 0;
+    padding: 0.45rem 0.55rem;
+    width: 100%;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .form-grid {
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .check-row {
+    align-items: center;
+    display: flex;
+  }
+
+  .actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  button {
+    background: var(--accent-primary);
+    border: 0;
+    color: var(--bg-base);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.45rem 0.75rem;
+  }
+
+  @media (max-width: 680px) {
+    .admin-form {
+      max-width: none;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

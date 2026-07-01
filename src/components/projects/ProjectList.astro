@@ -1,0 +1,102 @@
+---
+import type { Project } from '../../lib/db/types';
+import EmptyState from '../ui/EmptyState.astro';
+import Badge from '../ui/Badge.astro';
+import TagPill from '../ui/TagPill.astro';
+
+type Props = {
+  projects: Project[];
+};
+
+const { projects } = Astro.props;
+---
+
+{projects.length === 0 ? (
+  <EmptyState command="ls ~/projects" message="no projects written yet" />
+) : (
+  <div class="project-list" role="list">
+    {projects.map((project) => (
+      <article class="project-row" role="listitem">
+        <div class="row-main">
+          <a href={`/projects/${project.slug}`}>{project.title}</a>
+          <p>{project.summary}</p>
+        </div>
+        <div class="row-tags" aria-label={`${project.title} tech tags`}>
+          {project.techTagsList.map((tag) => <TagPill tag={tag} />)}
+        </div>
+        <Badge
+          text={project.status}
+          tone={project.status === 'wip' ? 'warning' : 'success'}
+          compact
+        />
+      </article>
+    ))}
+  </div>
+)}
+
+<style>
+  .project-list {
+    border-top: 1px solid var(--border-muted);
+  }
+
+  .project-row {
+    align-items: start;
+    border-bottom: 1px solid var(--border-muted);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1.6fr) minmax(12rem, 0.9fr) auto;
+    padding: 1rem 0;
+    min-width: 0;
+  }
+
+  .row-main {
+    min-width: 0;
+  }
+
+  .row-main a {
+    color: var(--text-strong);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+  }
+
+  .row-main a::before {
+    color: var(--accent-primary);
+    content: "./";
+    font-weight: 400;
+  }
+
+  .row-main p {
+    color: var(--text-muted);
+    margin: 0.25rem 0 0;
+    overflow-wrap: anywhere;
+  }
+
+  .row-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+  }
+
+  :global(.project-row > .badge) {
+    justify-self: end;
+  }
+
+  @media (max-width: 760px) {
+    .project-row {
+      gap: 0.65rem;
+      grid-template-columns: 1fr;
+      padding: 0.85rem 0;
+    }
+
+    :global(.project-row > .badge) {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .row-tags {
+      gap: 0.32rem;
+    }
+  }
+</style>

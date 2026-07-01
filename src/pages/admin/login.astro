@@ -1,0 +1,92 @@
+---
+import Font from 'astro/components/Font.astro';
+import '../../styles/global.css';
+
+export const prerender = false;
+
+const error = Astro.url.searchParams.get('error');
+const retry = Astro.url.searchParams.get('retry');
+
+const messages: Record<string, string> = {
+  config: 'ADMIN_PASSWORD_HASH is missing.',
+  invalid: 'password rejected.',
+  origin: 'origin rejected.',
+  rate: `too many failures. retry in ${retry ?? 'a few'} seconds.`,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#1e1e2e" />
+    <Font cssVariable="--font-mono" preload={true} />
+    <title>login | admin | endlevel</title>
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel" aria-labelledby="login-title">
+        <p class="section-label">~/admin/login</p>
+        <h1 id="login-title">login</h1>
+        {error && <p class="error">{messages[error] ?? 'login failed.'}</p>}
+        <form method="post" action="/api/admin/login">
+          <label>
+            password
+            <input name="password" type="password" autocomplete="current-password" required autofocus />
+          </label>
+          <button type="submit">enter</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .login-shell {
+    display: grid;
+    min-height: 100dvh;
+    place-items: center;
+    padding: 1rem;
+  }
+
+  .login-panel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-muted);
+    max-width: 28rem;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  h1 {
+    color: var(--text-strong);
+    margin: 0.2rem 0 1rem;
+  }
+
+  .error {
+    color: var(--color-danger);
+  }
+
+  form,
+  label {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  input {
+    background: var(--bg-hover);
+    border: 1px solid var(--border-muted);
+    color: var(--text-default);
+    padding: 0.5rem;
+  }
+
+  button {
+    background: var(--accent-primary);
+    border: 0;
+    color: var(--bg-base);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.5rem 0.75rem;
+  }
+</style>

@@ -4,7 +4,7 @@ Date: 2026-06-30
 
 ## Scope
 
-Build phase 1 of the personal portfolio and journal site. This phase establishes the Astro 6 app foundation, Nord/TUI design system, public read paths, SQLite data layer, shared markdown rendering, SEO/RSS/sitemap basics, Docker shell, and seed content.
+Build phase 1 of the personal portfolio and journal site. This phase establishes the Astro 6 app foundation, Catppuccin Mocha/TUI design system, public read paths, SQLite data layer, shared markdown rendering, SEO/RSS/sitemap basics, Docker shell, and seed content.
 
 Admin authentication, CRUD forms, uploads, preview endpoints, rate limiting, and full CSP hardening are intentionally deferred to phase 2. The schema includes `admin_sessions` now so the later auth phase has a stable migration path.
 
@@ -58,7 +58,7 @@ No CSS framework is used because the brief requires handwritten CSS custom prope
 
 ## Design System
 
-The visual language is TUI x Nord, dark-only. Canonical Nord tokens are defined once in global CSS and all component styles consume semantic custom properties. Raw hex values outside the token file are not allowed except where a third-party package requires them.
+The visual language is TUI x Catppuccin Mocha, dark-only. Canonical Catppuccin Mocha tokens are defined once in global CSS and all component styles consume semantic custom properties. Raw hex values outside the token file are not allowed except where a third-party package requires them.
 
 Typography is monospace everywhere through Astro's native Fonts API with a self-hosted JetBrains Mono-compatible font. Line height should be generous, around 1.6 to 1.7, because monospace body text is dense.
 
@@ -96,7 +96,7 @@ Seed content should make public templates useful immediately without pretending 
 
 One shared renderer handles every markdown-to-HTML conversion:
 
-`remark-parse` -> `remark-gfm` -> `remark-rehype` -> `@shikijs/rehype` with the `nord` theme -> `rehype-sanitize` -> `rehype-stringify`
+`remark-parse` -> `remark-gfm` -> `remark-rehype` -> `@shikijs/rehype` with the `catppuccin-mocha` theme -> `rehype-sanitize` -> `rehype-stringify`
 
 The renderer is server-side only in phase 1. `rehype-sanitize` always runs, including future admin preview calls. Malicious payloads such as `<script>`, event handler attributes, and `javascript:` links must render inert.
 
@@ -146,7 +146,7 @@ Phase 1 must pass:
 - RSS output smoke test
 - sitemap and robots exclusion check
 - JS-disabled navigation check
-- contrast check for Nord muted text on actual backgrounds
+- contrast check for Catppuccin muted text on actual backgrounds
 
 ## Documentation Checked
 

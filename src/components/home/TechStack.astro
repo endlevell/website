@@ -1,0 +1,57 @@
+---
+import { techStack } from '../../lib/config/techStack';
+import TerminalWindow from '../ui/TerminalWindow.astro';
+import TagPill from '../ui/TagPill.astro';
+---
+
+<TerminalWindow path="~/stack">
+  <div class="stack-grid">
+    {techStack.map((group) => (
+      <section class="stack-group" aria-labelledby={`stack-${group.name}`}>
+        <h2 id={`stack-${group.name}`}>{group.name}</h2>
+        <div>
+          {group.items.map((item) => <TagPill tag={item} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+</TerminalWindow>
+
+<style>
+  .stack-grid {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: 1.2fr 1fr;
+    min-width: 0;
+  }
+
+  .stack-group {
+    min-width: 0;
+  }
+
+  .stack-group:first-child {
+    grid-row: span 2;
+  }
+
+  h2 {
+    color: var(--text-strong);
+    font-size: 1rem;
+    margin: 0 0 0.65rem;
+  }
+
+  .stack-group div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .stack-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stack-group:first-child {
+      grid-row: auto;
+    }
+  }
+</style>
